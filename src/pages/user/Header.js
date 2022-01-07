@@ -39,7 +39,7 @@ function Header({user,setCreateModal,createModal,dispatch,location}) {
                         >
                             <Link to='/app/dashboard'>Dashboard</Link>
                         </li>
-                        <li className='list'>Logout</li>
+                        {/* <li className='list'>Logout</li> */}
                     </ul>
                     {/* <Box pr='10px' >
                          <p>{user.fullname}</p>  
