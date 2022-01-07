@@ -120,8 +120,8 @@ function ViewCapturedImage(props) {
                     <Button
                         leftIcon={<Refresh />}
                         variant='outline'
-                        pl='10'
-                        pr='10'
+                        // pl='10'
+                        // pr='10'
                         isLoading={loading}
                         onPress={()=>fetchImage(0)}
                         borderColor='white'
