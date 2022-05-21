@@ -4,14 +4,18 @@ import { Button, } from 'native-base'
 import ImageContainer from '../../components/ImageContainer';
 import { Refresh, RadioButtonChecked,NavigateNext, NavigateBefore } from '@mui/icons-material'
 import { io } from "socket.io-client";
-const socket = io("https://rootrsk-security-api.herokuapp.com/");
+// const socket = io("https://rootrsk-security-api.herokuapp.com/");
+const socket = io("http://bce4-117-252-246-193.ngrok.io");
 function ViewCapturedImage(props) {
     const [loading,setLoading]  = useState(false);
     const [images,setImages] = useState([])
     const [skip,setSkip] = useState(0)
     const [status,setStatus] = useState(true)
-    
-    
+    const [sensors,setSensors] = useState({
+        F:true,
+        U:true,
+        S:true,
+    })
     useEffect(()=>{
         socket.on('connect', () => {
             console.log('hii')
@@ -28,9 +32,19 @@ function ViewCapturedImage(props) {
             console.log('hii')
             setStatus(false)
         })
+        /** When Sensor Status is Updated ESP Module */
+        socket.on("sensor-update",(data)=>{
+            console.log(data)
+            setSensors(data)
+        })
 
     },[])
     console.log(props)
+    /**
+     * Function to Fetch Images from server
+     * @param {Number } skip 
+     * @returns Captured images
+     */
     const fetchImage = async (skip) => {
         setLoading(true)
         try {
@@ -52,6 +66,30 @@ function ViewCapturedImage(props) {
         }
         setLoading(false)
         
+    }
+    /**
+     * Function to Send a Image Capture Request ESP Module. 
+     */
+    const sendCaptureRequest = () =>{
+        socket.emit("capture-image","rootrsk")
+    }
+    const changeSensorStatue = (sensor) =>{
+    
+        if(sensor === "flash"){
+            socket.emit(sensors.F ? "FF" : "OF")
+            setSensors({...sensors,F:!(sensors.F)})
+            return
+        }
+        if(sensor === "sound"){
+            setSensors({...sensors,S: !(sensor.S)})
+            socket.emit(sensor.S ? "FS" : "OS")
+            return
+        }
+        if(sensor === "uv"){
+            socket.emit(sensors.U ? "FU" : "OU")
+            setSensors({...sensors,U:!(sensors.U)})
+            return
+        }
     }
     useEffect(() => {
         fetchImage(0)
@@ -142,6 +180,27 @@ function ViewCapturedImage(props) {
                     
                 </div>
             </div>
+            <div>
+                <button onClick={sendCaptureRequest} >
+                    Capture Image
+                </button>
+            </div>
+            <Button.Group>
+                <Button
+                    onPress={()=>changeSensorStatue("flash")}
+                    leftIcon={
+                      <RadioButtonChecked 
+                            style={{
+                                marginLeft:'10px',
+                                color:sensors.F?'rgb(33, 251, 106)':'rgb(251, 33, 33)'
+                            }}  
+                        />  
+                    }
+                    bg='white'
+                >
+                    Flash
+                </Button>
+            </Button.Group>
             <div className="flex sa wrap">
                 {
                     images.map((image)=>{

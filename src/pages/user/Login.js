@@ -91,7 +91,7 @@ function Login(props) {
                                     </Avatar>
                                 </Center>
                                 
-                                <h2 className='h22' mb = '10px' textAlign = 'center'>
+                                <h2 className='h22'>
                                     Login
                                 </h2>
                                 <Box p='5' pt='0' maxWidth='700px' m='auto' width='90%' >

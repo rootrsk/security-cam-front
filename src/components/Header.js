@@ -1,8 +1,7 @@
 import React from 'react'
 import { Link, useLocation,useNavigate } from 'react-router-dom'
-
 import { Flex, Box } from 'native-base'
-function Header({}) {
+function Header() {
     const location = useLocation()
     const navigate = useNavigate()
     return (

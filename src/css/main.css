@@ -76,7 +76,26 @@ a{
     background: blue;
     z-index: 200;
     max-height: 100vh;
-
+}
+.modal-content{
+    /* padding: 2px; */
+    /* border-radius: 5px;
+    overflow: hidden; */
+    position: relative;
+    overflow: hidden;
+}
+.labels-container {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    max-height: calc(90vw - 60px);
+    overflow: auto;
+    
+}
+.labels{
+    background-color: rgba(255, 255, 255, 0.534);
+    color: #000;
+    padding: 10px 20px;
 }
 /* input:hover{
     background: black !important;

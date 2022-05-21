@@ -1,10 +1,11 @@
 import React,{ useState } from 'react'
-import { Modal,Box } from '@mui/material'
+import { Modal,Box,Fade,Slide } from '@mui/material'
 import { Delete } from '@mui/icons-material'
 import { Button } from 'native-base'
 import axios from 'axios'
-function ImageContainer({uri,key,_id,captured_at,setImages}) {
+function ImageContainer({uri,key,_id,captured_at,setImages,labels}) {
     const [open,setOpen] = useState(false)
+    const [showLabel,setShowLabel] = useState(true)
     const [loading,setLoading] = useState(false)
     const date = new Date(captured_at).toString()
     const datetime = date.split('GMT')
@@ -46,15 +47,56 @@ function ImageContainer({uri,key,_id,captured_at,setImages}) {
                     onClose={()=>setOpen(false)} 
                 >
                     <Box sx={style}>
-                        <img src={uri} alt={key} width='100%' />
-                        <Button
-                            isLoading={loading}
-                            onPress={deleteHandler}
-                            bg='black'
-                            leftIcon={<Delete />}
-                        >
-                            Delete
-                        </Button>
+                        <div className="modal-content">
+                            <img src={uri} alt={key} width='100%' />
+                            <div className='labels-container' >
+                                <Slide in={showLabel} mountOnEnter unmountOnExit>
+                                    <div className="labels">
+                                        {
+                                            labels.length > 0 ?labels.map((label)=>{
+                                                return <div style={{display:'flex',alignItems:'center'}} >
+                                                    <p>{label.Name} - </p>
+                                                    <p> {Math.floor(label.Confidence)} %</p>
+                                                </div>
+                                            }): 
+                                            <div>
+                                                <p>No Labels To Show</p>
+                                            </div>
+                                        }
+                                    </div>
+                                </Slide>
+                            </div>
+                           
+                            <Button.Group p='1' justifyContent={'center'}>
+                                <Button
+                                    isLoading={loading}
+                                    onPress={deleteHandler}
+                                    bg='black'
+                                    _hover={{
+                                        bg:'black'
+                                    }}
+                                    _focus={{
+                                        bg: 'black'
+                                    }}
+                                    leftIcon={<Delete />}
+                                >
+                                    Delete
+                                </Button>   
+                                <Button
+                                    bg='black'
+                                    _hover={{
+                                        bg:'black'
+                                    }}
+                                    _focus={{
+                                        bg: 'black'
+                                    }}
+                                    onPress={()=>{setShowLabel(!showLabel)}}
+                                >
+                                    {showLabel?'Hide Label': 'Show Label'}
+                                </Button>
+                            </Button.Group>   
+                        </div>
+                        
                     </Box> 
                 </Modal>
             </div>
@@ -74,7 +116,8 @@ const style = {
     bgcolor: 'background.paper',
     // border: '1px solid #000',
     boxShadow: 2,
-    p: 1,
+    // p: 1,
     maxWidth:'1000px',
-    // borderRadius:'1px'
+    // borderRad
+    borderRadius:'1px'
 };
