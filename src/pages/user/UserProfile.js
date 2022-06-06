@@ -74,7 +74,7 @@ function UserProfile(props) {
             image,
         );
         const response = await axios({
-            url: 'https://rootrsk-security-api.herokuapp.com/user/profile-img',
+            url: '/user/profile-img',
             method:'POST',
             data: formData,
         })

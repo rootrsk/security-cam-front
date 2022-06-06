@@ -22,9 +22,9 @@ function Header({user,setCreateModal,createModal,dispatch,location}) {
                     <div className="">
                         <img 
                             className='logo' 
-                            src="https://i.ibb.co/k5qmS2j/Group-1.png "
-                            alt="logo"
-                            onClick={()=>navigate('/')}
+                            src="https://i.ibb.co/MGHD64p/Exclude.png"
+                            alt="logo"  
+                            onClick={()=>navigate('/')} 
                         />
                     </div>
                 <Flex direction='row' placeItems='center' alignItems='center'  >
@@ -58,8 +58,6 @@ function Header({user,setCreateModal,createModal,dispatch,location}) {
                             {user.username[0].toUpperCase()}
                         </Avatar>
                     }
-                    
-                    
                 </Flex>
             </Flex>
             

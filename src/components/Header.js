@@ -10,9 +10,16 @@ function Header() {
                     <div className="">
                         <img 
                             className='logo' 
-                            src="https://i.ibb.co/k5qmS2j/Group-1.png" 
+                            src = {window.innerWidth > 600 ?
+                                "https://i.ibb.co/tDSrDKs/Cloud-Vision.png":
+                                "https://i.ibb.co/MGHD64p/Exclude.png"
+                            }
                             alt="logo"  
                             onClick={()=>navigate('/')}
+                            style={{
+                                width:200,
+                                height:25
+                            }}
                         />
                     </div>
                 <Flex direction='row' placeItems='center' alignItems='center'  >

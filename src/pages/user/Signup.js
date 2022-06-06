@@ -52,7 +52,7 @@ function Signup() {
         
         setLoading(true)
         const response = await axios({
-            url: 'https://rootrsk-security-api.herokuapp.com/signup',
+            url: '/signup',
             method : 'POST',
             data : {username,password,fullname,email}
         })

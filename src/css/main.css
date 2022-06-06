@@ -57,8 +57,8 @@ a{
     padding: 5px;
 }
 .logo{
-    width:90px;
-    height:50px;
+    width:30px;
+    height:30px;
     cursor: pointer;
 }
 /* https://i.ibb.co/Q9qYBjG/Group-1-1.png */
@@ -449,4 +449,151 @@ a{
 
 .d{
     color:rgb(33, 251, 106);
+}
+
+/* Homepage */
+.landing-div{
+    width: 90%;
+    margin: auto;
+    font-weight: 700;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    height: 100vh;
+}
+.landing-div .div-1{
+    max-width: 600px;
+    text-align: justify;
+
+}
+.landing-div button {
+    padding: 10px 30px;
+    cursor: pointer;
+    margin-top: 15px;
+}
+.landing-div img{
+    height: 70vh;
+    flex: 1;
+    margin-top: 70px;
+}
+.main-text{
+    font-size: 60px;
+    /* margin-top: 50px; */
+    -webkit-text-fill-color: transparent;
+    background-repeat: repeat;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    background-repeat: repeat;
+    background-image: url('https://www.clementoni.com/media/prod/dk/39521/gradient-1000-pcs-high-quality-collection_uEw0tL3.jpg');
+    background-size: cover;
+    /* margin: 0px; */
+    animation: movebackground 20s infinite;
+}
+.main-text-helper{
+    font-weight: normal;
+    letter-spacing: 1px;
+    font-size: 16px;
+}
+.features{
+    width: 95%;
+    margin: auto;
+    display:flex;
+    justify-content: center;
+}
+.feature{
+    width:350px;
+    border-radius: 5px;
+    overflow: hidden;
+    background: #000d14;
+    margin: 5px;
+}
+.feature:hover {
+    background: #051e2c;
+}
+.description-div{
+    padding: 10px;
+    text-align: justify;
+}
+.feature img{
+    width: 100%;
+    height: 200px;
+}
+.feature h2{
+    text-align: center;
+    -webkit-text-fill-color: transparent;
+    background-repeat: repeat;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 30px;
+    background-clip: text;
+    -webkit-background-clip: text;
+     background-repeat: repeat;
+    background-image: url('https://mir-s3-cdn-cf.behance.net/project_modules/1400/4d845686128681.5d909dad4ddd3.jpg');
+    background-size: cover;
+    margin: 0px;
+    font-weight: 600;
+    animation: movebackground 15s infinite;
+
+    
+}
+@keyframes movebackground{
+    0%{
+        background-position: 0px;
+    }
+    25%{
+        background-position: 350px;
+    }
+    50% {
+        background-position: 700px;
+    }
+    75%{
+        background-position: 0px;
+    }
+    100%{
+        background-position: 700px;
+    }
+}
+
+/* About  */
+.details-container{
+    background-color: #131D25;
+    width:300px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 15px;
+    margin: 10px;
+}   
+.details-container button{
+    display: flex;
+    padding: 5px 10px;
+}
+.m90{
+    width: 95%;
+    margin: auto;
+}
+.t2{
+    margin-left: 20px;
+}
+@media only screen and (max-width: 600px) {
+    .logo{
+        width: 40px !important;
+        height: 40px !important;
+    }
+    .main-text {
+        font-size: 40px;
+        background-image: url('https://courtneylothcom.files.wordpress.com/2021/12/photo-1579546929518-9e396f3cc809.jpg');
+
+    }
+    .landing-div img{
+        /* display: none; */
+        width: 100px;
+        height: 130px;
+    }
+    .image-container{
+        width: 350px;
+        height: 350px;
+    }
 }

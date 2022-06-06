@@ -15,17 +15,18 @@ function Login(props) {
     const search = queryString.parse(location.search);
     console.log(location)
     const toast = useToast()
-    const [username,setUsername] = useState('rootrsk')
+    const [username,setUsername] = useState('')
     const [loading,setLoading] = useState(false)
-    const [password,setPassword] = useState('rootrsk')
+    const [password,setPassword] = useState('')
     const [error,setError] = useState('')
-    const loginHandler = async() => {
+    const loginHandler = async({token}) => {
         setLoading(true)
         const response = await axios({
-            url: 'https://rootrsk-security-api.herokuapp.com/login',
+            url: token ? '/user/me':'/login',
             method : 'POST',
             data : {id:username,password}
         })
+        setLoading(false)
         console.log(response.data)
         if(response.data.error){
             toast.show({
@@ -33,25 +34,22 @@ function Login(props) {
                 description : response.data.error,
                 status : 'error'
             })
-        } else{
-            // toast.show({
-            //     title : 'Success!!!',
-            //     description : 'Login Successful!',
-            //     status : 'success'
-            // })
-            axios.defaults.headers.common['authorization'] = response.data.token;
-            props.dispatch({
-                type : 'ADD_USER',
-                user : response.data.user,
-                aunthenticated_as : 'student',
-                token : response.data.token
-            })
-            if(search.next){
-                navigate(search.next)
-            }else{
-                navigate('/app/dashboard')
-            }
+            return 
+        } 
+        axios.defaults.headers.common['authorization'] = response.data.token;
+        localStorage.setItem('token',JSON.stringify(response.data.token))
+        props.dispatch({
+            type : 'ADD_USER',
+            user : response.data.user,
+            aunthenticated_as : 'student',
+            token : response.data.token
+        })
+        if(search.next){
+            navigate(search.next)
+        }else{
+            navigate('/app/dashboard')
         }
+        
         setLoading(false)
         
         
@@ -61,6 +59,12 @@ function Login(props) {
         console.log(props.auth)
         if(props.auth.user){
             navigate('/app/dashboard')
+        }
+        const token = localStorage.getItem('token')
+        if (token){
+            const parsed_token = JSON.parse(token)
+            axios.defaults.headers.common['authorization'] = parsed_token;
+            loginHandler({token:parsed_token})
         }
         return () =>{}
     },[])

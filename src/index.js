@@ -4,10 +4,12 @@ import App from './App';
 import { NativeBaseProvider } from 'native-base';
 import store from './redux/store'
 import  {Provider} from 'react-redux'
-
+import axios from 'axios'
+axios.defaults.baseURL = "https://rootrsk-cloudvision.herokuapp.com"
+// axios.defaults.baseURL = "http://localhost:3001"
 ReactDOM.render(
   <React.StrictMode>
-    <NativeBaseProvider>
+    <NativeBaseProvider>  
       <Provider store = {store}>
         <App/>
       </Provider>

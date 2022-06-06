@@ -1,21 +1,24 @@
 import React,{ useState, useEffect } from 'react'
 import axios from 'axios'
-import { Button, } from 'native-base'
+import { Button, Text} from 'native-base'
 import ImageContainer from '../../components/ImageContainer';
 import { Refresh, RadioButtonChecked,NavigateNext, NavigateBefore } from '@mui/icons-material'
 import { io } from "socket.io-client";
 // const socket = io("https://rootrsk-security-api.herokuapp.com/");
-const socket = io("http://bce4-117-252-246-193.ngrok.io");
+const socket = io("https://rootrsk-cloudvision.herokuapp.com");
 function ViewCapturedImage(props) {
     const [loading,setLoading]  = useState(false);
     const [images,setImages] = useState([])
-    const [skip,setSkip] = useState(0)
-    const [status,setStatus] = useState(true)
+    const [page,setPage] = useState(1)
+    const [status,setStatus] = useState(false)
+    const [prev,setPrev] = useState({loading:false,disabled:true})
+    const [next,setNext] = useState({loading:false,disabled:true})
     const [sensors,setSensors] = useState({
         F:true,
         U:true,
         S:true,
     })
+    console.log(socket)
     useEffect(()=>{
         socket.on('connect', () => {
             console.log('hii')
@@ -27,6 +30,7 @@ function ViewCapturedImage(props) {
             setImages(prevState=>{
                 return [image,...prevState]
             })
+            setStatus(true)
         })
         socket.on('disconnect', () => {
             console.log('hii')
@@ -36,6 +40,7 @@ function ViewCapturedImage(props) {
         socket.on("sensor-update",(data)=>{
             console.log(data)
             setSensors(data)
+            setStatus(true)
         })
 
     },[])
@@ -45,11 +50,11 @@ function ViewCapturedImage(props) {
      * @param {Number } skip 
      * @returns Captured images
      */
-    const fetchImage = async (skip) => {
+    const fetchImage = async (page) => {
         setLoading(true)
         try {
             const response = await axios({
-                url: 'https://rootrsk-security-api.herokuapp.com/user/images?skip='+skip,
+                url: '/user/images?page='+page,
                 method: 'get',
             })
             console.log(response.data)
@@ -58,7 +63,16 @@ function ViewCapturedImage(props) {
             }
             if(response.data && response.data.savedImages){
                 setImages(response.data.savedImages)
-                setSkip(parseInt(skip) + parseInt((response.data.savedImages).length))
+                if (page < 2){
+                    setPrev({...prev,disabled:true})
+                }else{
+                    setPrev({...prev,disabled:false})
+                }
+                if(response.data.savedImages.length < 50){
+                    setNext({...next,disabled:true})
+                }else{
+                    setNext({...next,disabled:false})
+                }
             }
 
         } catch (error) {
@@ -92,7 +106,11 @@ function ViewCapturedImage(props) {
         }
     }
     useEffect(() => {
-        fetchImage(0)
+        fetchImage(1)
+        setPage(1)
+        if(socket && socket.connected){
+            setStatus(true)
+        }
         return () => {}
     }, [])
     return (
@@ -113,13 +131,17 @@ function ViewCapturedImage(props) {
                             }}  
                         />
                     </div>
-                    <div className='flex' >
+                    <div className='flex'style={{ alignItems:'center'}} >
                         <Button
                             leftIcon={<NavigateBefore />}
                             variant='outline'
-                            isDisabled={true}
                             isLoading={loading}
+                            isDisabled={prev.disabled}
                             // onPress={fetchImage}
+                            onPress={()=>{
+                                fetchImage(page-1)
+                                setPage(page-1)
+                            }}
                             borderColor='white'
                             borderRadius='2px'
                             fontSize='22px'
@@ -134,12 +156,21 @@ function ViewCapturedImage(props) {
                             }}
                         >
                         </Button>
+                        <Text
+                            ml='2'
+                            color='white'
+                            fontSize={20}
+                        >{page}</Text>
                         <Button
                             leftIcon={<NavigateNext />}
                             variant='outline'
                             ml='2'
                             isLoading={loading}
-                            onPress={()=>fetchImage(skip)}
+                            isDisabled={next.disabled}
+                            onPress={()=>{
+                                fetchImage(page+1)
+                                setPage(page+1)
+                            }}
                             borderColor='white'
                             borderRadius='2px'
                             fontSize='22px'
@@ -161,7 +192,10 @@ function ViewCapturedImage(props) {
                         // pl='10'
                         // pr='10'
                         isLoading={loading}
-                        onPress={()=>fetchImage(0)}
+                        onPress={()=>{
+                            fetchImage(1)
+                            setPage(1)
+                        }}
                         borderColor='white'
                         borderRadius='2px'
                         fontSize='22px'
@@ -180,7 +214,7 @@ function ViewCapturedImage(props) {
                     
                 </div>
             </div>
-            <div>
+            {/* <div>
                 <button onClick={sendCaptureRequest} >
                     Capture Image
                 </button>
@@ -200,7 +234,7 @@ function ViewCapturedImage(props) {
                 >
                     Flash
                 </Button>
-            </Button.Group>
+            </Button.Group> */}
             <div className="flex sa wrap">
                 {
                     images.map((image)=>{

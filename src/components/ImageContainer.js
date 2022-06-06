@@ -14,7 +14,7 @@ function ImageContainer({uri,key,_id,captured_at,setImages,labels}) {
         setLoading(true)
         try{
             const response = await axios({
-                url: 'https://rootrsk-security-api.herokuapp.com/user/image',
+                url: '/user/image',
                 method:'DELETE',
                 data:{ _id }
             })
@@ -36,7 +36,7 @@ function ImageContainer({uri,key,_id,captured_at,setImages,labels}) {
         setLoading(false)
     }
     return (
-        <div>
+        <div style={{padding:0,margin:0}}>
             <div className='image-container' >
                 <img src={uri} alt={key} onClick={()=>setOpen(true)} style={{cursor:'pointer'}}  />
                 <p>{datetime[0].toString()} <br/> {timezone.toString()}</p>
@@ -113,7 +113,7 @@ const style = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: '90%',
-    bgcolor: 'background.paper',
+    bgcolor: '#051e2c',
     // border: '1px solid #000',
     boxShadow: 2,
     // p: 1,
